@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %} {% block title %}Welcome{% endblock %}
+
+<h1></h1>
+{% block content %}
+<div class="mt-6 px-6 py-12 bg-gray-100 rouded-xl">
+  <h2 class="mb-12 text-3xl">My Items</h2>
+
+  <div class="grid grid-cols-4 gap-3">
+    {% for item in items %}
+    <div>
+      <div>
+        <a href="{% url 'item:detail' item.id %}">
+          <div>
+            <img
+              src="{{ item.image.url }}"
+              class="rounded-t-xl"
+              style="width: 400px; height: 500px"
+            />
+          </div>
+
+          <div class="p-6 bg-white rounded-b-xl">
+            <h2 class="text-2xl">{{ item.name }}</h2>
+            <p class="text-gray-500">Price: {{ item.price }}</p>
+          </div>
+        </a>
+      </div>
+      <br />
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
