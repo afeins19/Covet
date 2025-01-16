@@ -1,86 +1,69 @@
 {% extends 'core/base.html' %}
-
-<h1></h1>
-
-{% block title %}{{ item.name }}{%endblock%}
-
-<h1></h1>
+{% block title %}{{ item.name }}{% endblock %}
 
 {% block content %}
-<div class="grid grid-cols-3 gap-6">
-  <div class="col-span-3">
-    <img src="{{ item.image.url }}" class="rounded-xl" />
-  </div>
-
-  <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
-    <h1 class="mb-6 text-3xl">{{ item.name }}</h1>
-    <p class="text-gray-500"><strong>Price: </strong>{{ item.price }}</p>
-    <br />
-    <p class="text-gray-500">
-      <strong>Sold by: </strong>{{ item.created_by.username }}
-    </p>
-    {% if item.description %}
-    <p class="text-gray-700">
-      <strong class="text-gray-500">Description:</strong><br />
-      {{ item.description }}
-    </p>
-    {% endif %}
-
-    <br />
-    {% if request.user == item.created_by %}
-    <div class="mt-6 p-6 bg-white rounded-xl">
-      <p class="text-2xl text-teal-500 font-semibold">
-        This Item was Listed by You
-      </p>
-      <p class="text-gray-500">
-        Please note that deleting your item is a permanent action.
-      </p>
-      <a
-        href="{% url 'item:edit' item.id %}"
-        class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl"
-        >Edit</a
-      >
-
-      <a
-        href="{% url 'item:delete' item.id %}"
-        class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl"
-        >Delete</a
-      >
+<div class="container mx-auto px-6 py-12">
+  <!-- Item Detail Section -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Item Image -->
+    <div class="lg:col-span-2">
+      <img src="{{ item.image.url }}" class="w-full h-[500px] object-cover rounded-xl" />
     </div>
 
-    {% else %}
-    <a
-      href="#"
-      class="inline-block mt-4 px-6 py-3 text-lg font-smibold bg-teal-500 text-white rounded-xl hover:bg-teal-700"
-      >Contact Seller
-    </a>
-    {% endif %}
-    <div>
-      <div class="mb-6 grid grid-cols-3 gap-3">
-        <br />
-        <h2 class="mt-6 mb-6 text-2xl text-center font-semibold text-gray-500">
-          More like This
-        </h2>
-        <br />
-        {% for item in related_items %}
-        <div>
-          <div class="mb-12">
-            <a href="{% url 'item:detail' item.id %}">
-              <div>
-                <img src="{{ item.image.url }}" class="rounded-t-xl" />
-              </div>
+    <!-- Item Info -->
+    <div class="p-6 bg-gray-100 rounded-xl">
+      <h1 class="mb-6 text-3xl font-semibold">{{ item.name }}</h1>
+      <p class="text-gray-500"><strong>Price:</strong> ${{ item.price }}</p>
+      <p class="text-gray-500"><strong>Sold by:</strong> {{ item.created_by.username }}</p>
 
-              <div class="p-6 bg-white rounded-b-xl">
-                <h2 class="text-2xl">{{ item.name }}</h2>
-                <p class="text-gray-500">Price: ${{ item.price }}</p>
-              </div>
-            </a>
-            <br />
-          </div>
-          {% endfor %}
+      {% if item.description %}
+      <p class="mt-4 text-gray-700">
+        <strong class="text-gray-500">Description:</strong><br />
+        {{ item.description }}
+      </p>
+      {% endif %}
+
+      <!-- Seller Actions -->
+      {% if request.user == item.created_by %}
+      <div class="mt-6 p-6 bg-white rounded-xl">
+        <p class="text-2xl text-teal-500 font-semibold">This Item was Listed by You</p>
+        <p class="text-gray-500">Deleting your item is a permanent action.</p>
+        <div class="mt-4 space-x-4">
+          <a href="{% url 'item:edit' item.id %}" 
+             class="inline-block px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">
+            Edit
+          </a>
+          <a href="{% url 'item:delete' item.id %}" 
+             class="inline-block px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-red-700">
+            Delete
+          </a>
         </div>
       </div>
+      {% else %}
+      <a href="#" 
+         class="inline-block mt-4 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">
+        Contact Seller
+      </a>
+      {% endif %}
     </div>
   </div>
-  {% endblock %}
+
+  <!-- Related Items -->
+  <div class="mt-12">
+    <h2 class="text-3xl text-gray-600 font-semibold mb-6">More like This</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for related_item in related_items %}
+      <div class="bg-white shadow-md rounded-xl overflow-hidden">
+        <a href="{% url 'item:detail' related_item.id %}">
+          <img src="{{ related_item.image.url }}" class="w-full h-60 object-cover rounded-t-xl" />
+          <div class="p-6">
+            <h2 class="text-2xl font-semibold">{{ related_item.name }}</h2>
+            <p class="text-gray-500">Price: ${{ related_item.price }}</p>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
+{% endblock %}

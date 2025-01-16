@@ -16,4 +16,5 @@ urlpatterns = [
     path('terms/', views.terms, name='terms'),
     
     path('login/', auth_views.LoginView.as_view(template_name='core/login.html', authentication_form=LoginForm), name='login'), #redirect to a custom login form...otherwise django doesnt know what to get
+    path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'), # default django logout
 ]

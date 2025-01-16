@@ -46,3 +46,7 @@ def signup(request):
     return render(request, 'core/signup.html', {
         'form': form
     }) 
+
+def base_view(request):
+    categories = Category.objects.all()
+    return render(request, 'core/base.html', {'categories': categories})

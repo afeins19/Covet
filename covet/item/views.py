@@ -12,7 +12,10 @@ def items(request):
     category_id = request.GET.get('category', 0)  #backend for items.html category function...lets links to categories redirect 
     categories = Category.objects.all() 
     items = Item.objects.filter(is_sold=False)
-    
+
+    if category_id:
+        items = items.filter(category_id=int(category_id))
+
     if category_id: 
         items = items.filter(category_id=category_id)
 
